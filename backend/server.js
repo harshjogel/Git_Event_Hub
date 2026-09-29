@@ -61,7 +61,7 @@ function formatEvent(row, regCount = 0) {
 // -------------------------------------------------------------
 
 // Root endpoint - Health check / Info
-app.get('/', (req, res) => {
+app.get(['/', '/api'], (req, res) => {
   res.json({
     message: 'Git Club Event Hub API is running!',
     endpoints: [
