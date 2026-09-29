@@ -273,13 +273,15 @@ app.post('/api/registrations', (req, res) => {
   });
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`===============================================`);
-  console.log(` Git Club Event Hub Backend running on port ${PORT}`);
-  console.log(` Local URL: http://localhost:${PORT}`);
-  console.log(` Events API: http://localhost:${PORT}/api/events`);
-  console.log(`===============================================`);
-});
+// Start the server (when running standalone)
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`===============================================`);
+    console.log(` Git Club Event Hub Backend running on port ${PORT}`);
+    console.log(` Local URL: http://localhost:${PORT}`);
+    console.log(` Events API: http://localhost:${PORT}/api/events`);
+    console.log(`===============================================`);
+  });
+}
 
 module.exports = app;

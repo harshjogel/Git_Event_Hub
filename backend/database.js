@@ -1,9 +1,23 @@
 // database.js - SQLite database setup and initialization for Git Club Event Hub
+const fs = require('fs');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 
-// Path to SQLite database file
-const dbPath = path.join(__dirname, 'database.sqlite');
+// Determine SQLite database path (Vercel serverless requires writable /tmp)
+const localDbPath = path.join(__dirname, 'database.sqlite');
+let dbPath = localDbPath;
+
+if (process.env.VERCEL) {
+  const tmpDbPath = path.join('/tmp', 'database.sqlite');
+  try {
+    if (!fs.existsSync(tmpDbPath) && fs.existsSync(localDbPath)) {
+      fs.copyFileSync(localDbPath, tmpDbPath);
+    }
+  } catch (copyErr) {
+    console.warn('Note: Could not copy initial sqlite file to /tmp, will initialize fresh:', copyErr.message);
+  }
+  dbPath = tmpDbPath;
+}
 
 // Initialize database connection
 const db = new sqlite3.Database(dbPath, (err) => {
